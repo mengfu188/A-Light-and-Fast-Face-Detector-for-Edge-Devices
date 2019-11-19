@@ -69,6 +69,7 @@ def main():
                                                         NMS_threshold=0.4, NMS_flag=True, skip_scale_branch_list=[])
             print(f'file {file_name} detect {len(bboxes)} faces, use time {time.time() - tic} s')
 
+
             for bbox in bboxes:
                 cv2.rectangle(im, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (0, 255, 0), 2)
 
