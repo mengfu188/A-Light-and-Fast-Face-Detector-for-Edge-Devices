@@ -41,7 +41,7 @@ def main():
         from config_farm import configuration_10_320_20L_5scales_v2 as cfg
 
         symbol_file_path = '../symbol_farm/symbol_10_320_20L_5scales_v2_deploy.json'
-        model_file_path = '../saved_model/configuration_10_320_20L_5scales_v2/train_10_320_20L_5scales_v2_iter_1800000.params'
+        model_file_path = '../saved_model/configuration_10_320_20L_5scales_v2/train_10_320_20L_5scales_v2_iter_1000000.params'
     else:
         raise TypeError('Unsupported LFFD Version.')
 
@@ -64,8 +64,10 @@ def main():
         for file_name in file_name_list:
             im = cv2.imread(os.path.join(data_folder, file_name))
 
+            tic = time.time()
             bboxes, infer_time = face_predictor.predict(im, resize_scale=1, score_threshold=0.6, top_k=10000, \
                                                         NMS_threshold=0.4, NMS_flag=True, skip_scale_branch_list=[])
+            print(f'file {file_name} detect {len(bboxes)} faces, use time {time.time() - tic} s')
 
             for bbox in bboxes:
                 cv2.rectangle(im, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (0, 255, 0), 2)
@@ -73,8 +75,8 @@ def main():
             # if max(im.shape[:2]) > 1600:
             #     scale = 1600/max(im.shape[:2])
             #     im = cv2.resize(im, (0, 0), fx=scale, fy=scale)
-            cv2.imshow('im', im)
-            cv2.waitKey(5000)
+            # cv2.imshow('im', im)
+            # cv2.waitKey(5000)
             cv2.imwrite(os.path.join(data_folder, file_name.replace('.jpg', '_result.png')), im)
     elif args.mode == 'video':
         # win_name = 'LFFD DEMO'
